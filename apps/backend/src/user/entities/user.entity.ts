@@ -24,4 +24,10 @@ export class User {
 
   @Field(() => [Comment])
   comments?: Comment[];
+
+  @Field()
+  createdAt: Date;
+
+  @Field()
+  updatedAt: Date;
 }

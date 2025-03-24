@@ -2,13 +2,14 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
-type Post {
+type User {
   id: Int!
-  title: String!
-  slug: String
-  thumbnail: String
-  content: String!
-  published: Boolean!
+  name: String!
+  email: String!
+  bio: String
+  avatar: String
+  posts: [Post!]!
+  comments: [Comment!]!
   createdAt: DateTime!
   updatedAt: DateTime!
 }
@@ -24,16 +25,7 @@ type Comment {
   post: Post!
   author: User!
   createdAt: DateTime!
-}
-
-type User {
-  id: Int!
-  name: String!
-  email: String!
-  bio: String
-  avatar: String
-  posts: [Post!]!
-  comments: [Comment!]!
+  updatedAt: DateTime!
 }
 
 type Tag {
@@ -42,11 +34,31 @@ type Tag {
   posts: [Post!]!
 }
 
+type Post {
+  id: Int!
+  title: String!
+  slug: String
+  thumbnail: String
+  content: String!
+  published: Boolean!
+  author: User!
+  tags: [Tag!]!
+  comments: [Comment!]!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+type Like {
+  id: Int!
+  user: User!
+  post: Post!
+}
+
 type Query {
   posts: [Post!]!
   user(id: Int!): User!
   comment(id: Int!): Comment!
-  tag(id: Int!): Tag!
+  like(id: Int!): Like!
 }
 
 type Mutation {
@@ -56,9 +68,9 @@ type Mutation {
   createComment(createCommentInput: CreateCommentInput!): Comment!
   updateComment(updateCommentInput: UpdateCommentInput!): Comment!
   removeComment(id: Int!): Comment!
-  createTag(createTagInput: CreateTagInput!): Tag!
-  updateTag(updateTagInput: UpdateTagInput!): Tag!
-  removeTag(id: Int!): Tag!
+  createLike(createLikeInput: CreateLikeInput!): Like!
+  updateLike(updateLikeInput: UpdateLikeInput!): Like!
+  removeLike(id: Int!): Like!
 }
 
 input CreateUserInput {
@@ -83,12 +95,12 @@ input UpdateCommentInput {
   id: Int!
 }
 
-input CreateTagInput {
+input CreateLikeInput {
   """Example field (placeholder)"""
   exampleField: Int!
 }
 
-input UpdateTagInput {
+input UpdateLikeInput {
   """Example field (placeholder)"""
   exampleField: Int
   id: Int!

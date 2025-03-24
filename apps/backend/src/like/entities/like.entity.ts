@@ -3,22 +3,13 @@ import { Post } from 'src/post/entities/post.entity';
 import { User } from 'src/user/entities/user.entity';
 
 @ObjectType()
-export class Comment {
+export class Like {
   @Field(() => Int)
   id: number;
 
-  @Field()
-  content: string;
+  @Field(() => User)
+  user: User;
 
   @Field(() => Post)
   post: Post;
-
-  @Field(() => User)
-  author: User;
-
-  @Field()
-  createdAt: Date;
-
-  @Field()
-  updatedAt: Date;
 }
