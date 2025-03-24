@@ -1,4 +1,6 @@
-import { Query, Resolver } from '@nestjs/graphql';
+import { UseGuards } from '@nestjs/common';
+import { Context, Query, Resolver } from '@nestjs/graphql';
+import { JwtAuthGuard } from 'src/auth/guards/jwt-auth/jwt-auth.guard';
 import { Post } from './entities/post.entity';
 import { PostService } from './post.service';
 
@@ -6,8 +8,11 @@ import { PostService } from './post.service';
 export class PostResolver {
   constructor(private readonly postService: PostService) {}
 
+  @UseGuards(JwtAuthGuard)
   @Query(() => [Post], { name: 'posts' })
-  findAll() {
+  findAll(@Context() context) {
+    const user = context.req.user;
+    console.log(user);
     return this.postService.findAll();
   }
 }
