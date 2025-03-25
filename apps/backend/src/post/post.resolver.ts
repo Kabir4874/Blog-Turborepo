@@ -8,7 +8,7 @@ import { PostService } from './post.service';
 export class PostResolver {
   constructor(private readonly postService: PostService) {}
 
-  @UseGuards(JwtAuthGuard)
+  // @UseGuards(JwtAuthGuard)
   @Query(() => [Post], { name: 'posts' })
   findAll(@Context() context) {
     const user = context.req.user;
