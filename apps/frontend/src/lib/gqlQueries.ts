@@ -15,7 +15,7 @@ export const GET_POSTS = gql`
 `;
 
 export const GET_POST_BY_ID = gql`
-  query getPostById($id: Int) {
+  query getPostById($id: Int!) {
     getPostById(id: $id) {
       id
       title
