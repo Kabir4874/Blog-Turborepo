@@ -1,8 +1,11 @@
 import { Post } from "@/lib/types/modelTypes";
+import Pagination from "./pagination";
 import PostCard from "./postCard";
 
 type Props = {
   posts: Post[];
+  currentPage: number;
+  totalPages: number;
 };
 
 const Posts = (props: Props) => {
@@ -17,6 +20,11 @@ const Posts = (props: Props) => {
           <PostCard key={post.id} {...post} />
         ))}
       </div>
+      <Pagination
+        className="mt-6"
+        currentPage={props.currentPage}
+        totalPages={props.totalPages}
+      />
     </section>
   );
 };

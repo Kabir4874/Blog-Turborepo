@@ -17,3 +17,7 @@ export const fetchPosts = async ({
   console.log(data);
   return { posts: data.posts as Post[], totalPosts: data.postCount };
 };
+
+export const fetchPostById=(id:number)=>{
+  const data= await fetchGraphQL()
+}
