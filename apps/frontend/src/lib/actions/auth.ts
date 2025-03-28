@@ -3,8 +3,9 @@
 import { print } from "graphql";
 import { redirect } from "next/navigation";
 import { fetchGraphQL } from "../fetchGraphQL";
-import { CREATE_USER_MUTATION } from "../gqlQueries";
+import { CREATE_USER_MUTATION, SIGN_IN_MUTATION } from "../gqlQueries";
 import { SignUpFormState } from "../types/formState";
+import { LoginFormSchema } from "../zodSchemas/loginFormSchema";
 import { SignUpFormSchema } from "../zodSchemas/signUpFormSchema";
 
 export async function signUp(
@@ -33,4 +34,34 @@ export async function signUp(
     };
 
   redirect("/auth/signin");
+}
+
+export async function signIn(
+  state: SignUpFormState,
+  formData: FormData
+): Promise<SignUpFormState> {
+  const validatedFields = LoginFormSchema.safeParse(
+    Object.fromEntries(formData.entries())
+  );
+
+  if (!validatedFields.success)
+    return {
+      errors: validatedFields.error.flatten().fieldErrors,
+      data: Object.fromEntries(formData.entries()),
+    };
+
+  const data = await fetchGraphQL(print(SIGN_IN_MUTATION), {
+    input: {
+      ...validatedFields.data,
+    },
+  });
+
+  if (data.errors)
+    return {
+      data: Object.fromEntries(formData.entries()),
+      message: "Invalid Credentials",
+    };
+
+  //   revalidatePath("/");
+  redirect("/");
 }
