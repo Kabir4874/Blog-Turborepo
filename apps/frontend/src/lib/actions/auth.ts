@@ -1,6 +1,7 @@
 "use server";
 
 import { print } from "graphql";
+import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { fetchGraphQL } from "../fetchGraphQL";
 import { CREATE_USER_MUTATION, SIGN_IN_MUTATION } from "../gqlQueries";
@@ -62,6 +63,6 @@ export async function signIn(
       message: "Invalid Credentials",
     };
 
-  //   revalidatePath("/");
+  revalidatePath("/");
   redirect("/");
 }
