@@ -5,6 +5,7 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { fetchGraphQL } from "../fetchGraphQL";
 import { CREATE_USER_MUTATION, SIGN_IN_MUTATION } from "../gqlQueries";
+import { createSession } from "../session";
 import { SignUpFormState } from "../types/formState";
 import { LoginFormSchema } from "../zodSchemas/loginFormSchema";
 import { SignUpFormSchema } from "../zodSchemas/signUpFormSchema";
@@ -62,6 +63,15 @@ export async function signIn(
       data: Object.fromEntries(formData.entries()),
       message: "Invalid Credentials",
     };
+
+  await createSession({
+    user: {
+      id: data.signIn.id,
+      name: data.signIn.name,
+      avatar: data.signIn.avatar,
+    },
+    accessToken: data.signIn.accessToken,
+  });
 
   revalidatePath("/");
   redirect("/");
