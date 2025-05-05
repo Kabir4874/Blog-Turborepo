@@ -1,14 +1,13 @@
 import { SessionUser } from "@/lib/session";
-import React from "react";
-import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
-import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
-import { UserIcon } from "lucide-react";
 import {
   ArrowRightStartOnRectangleIcon,
   ListBulletIcon,
   PencilSquareIcon,
 } from "@heroicons/react/16/solid";
+import { UserIcon } from "lucide-react";
 import Link from "next/link";
+import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
+import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
 
 type Props = {
   user: SessionUser;
@@ -19,7 +18,10 @@ const Profile = ({ user }: Props) => {
     <Popover>
       <PopoverTrigger>
         <Avatar>
-          <AvatarImage src={user.avatar} />
+          <AvatarImage
+            src={user.avatar}
+            className="rounded-full w-14 border-2 border-white"
+          />
           <AvatarFallback>
             <UserIcon className="w-8 text-slate-500" />
           </AvatarFallback>
