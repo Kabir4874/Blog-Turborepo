@@ -9,7 +9,7 @@
     "lint": "turbo run lint"
   },
   "packageManager": "npm@11.2.0",
-  "workspaces":[
+  "workspaces": [
     "apps/*"
   ],
   "keywords": [],
