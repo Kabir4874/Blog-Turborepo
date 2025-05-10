@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { DEFAULT_PAGE_SIZE } from 'src/constants';
 import { PrismaService } from 'src/prisma/prisma.service';
+import { CreateCommentInput } from './dto/create-comment.input';
 
 @Injectable()
 export class CommentService {
@@ -25,5 +26,19 @@ export class CommentService {
 
   async count(postId: number) {
     return await this.prisma.comment.count({ where: { postId } });
+  }
+
+  async create(createCommentInput: CreateCommentInput, authorId: number) {
+    return await this.prisma.comment.create({
+      data: {
+        content: createCommentInput.content,
+        post: { connect: { id: createCommentInput.postId } },
+        author: {
+          connect: {
+            id: authorId,
+          },
+        },
+      },
+    });
   }
 }
