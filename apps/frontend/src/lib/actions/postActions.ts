@@ -21,3 +21,15 @@ export const fetchPostById = async (id: number) => {
   const data = await fetchGraphQL(print(GET_POST_BY_ID), { id });
   return data.getPostById as Post;
 };
+
+export async function fetchUserPosts({
+  userId,
+  page,
+  pageSize,
+}: {
+  userId: number;
+  page?: number;
+  pageSize: number;
+}) {
+  const { take, skip } = transformTakeSkip({ page, pageSize });
+}
