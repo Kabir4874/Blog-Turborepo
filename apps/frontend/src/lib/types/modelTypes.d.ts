@@ -10,6 +10,11 @@ export type Post = {
   tags?: Tag[];
   createdAt: Date;
   updatedAt: Date;
+
+  _count: {
+    likes: number;
+    comments: number;
+  };
 };
 
 export type User = {
