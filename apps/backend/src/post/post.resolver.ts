@@ -1,7 +1,8 @@
 import { UseGuards } from '@nestjs/common';
-import { Args, Context, Int, Query, Resolver } from '@nestjs/graphql';
+import { Args, Context, Int, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth/jwt-auth.guard';
 import { DEFAULT_PAGE_SIZE } from 'src/constants';
+import { CreatePostInput } from './dto/create-post.input';
 import { Post } from './entities/post.entity';
 import { PostService } from './post.service';
 
@@ -50,5 +51,15 @@ export class PostResolver {
   userPostCount(@Context() context) {
     const userId = context.req.user.id;
     return this.postService.userPostCount(userId);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Mutation(() => Post)
+  createPost(
+    @Context() context,
+    @Args('createPostInput') createPostInput: CreatePostInput,
+  ) {
+    const authorId = context.req.user.id;
+    return this.postService.create({ createPostInput, authorId });
   }
 }
