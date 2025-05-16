@@ -17,6 +17,12 @@ const UpsertPostForm = ({ state, formAction }: Props) => {
       action={formAction}
       className="flex flex-col gap-4 [&>div>label]:text-slate-500 [&>div>label]:mb-2 [&>div>input]:transition [&>div>textarea]:transition"
     >
+      <input
+        type="text"
+        hidden
+        name="postId"
+        defaultValue={state?.data?.postId}
+      />
       <div>
         <Label htmlFor="title">Title</Label>
         <Input
@@ -54,8 +60,13 @@ const UpsertPostForm = ({ state, formAction }: Props) => {
         {!!state?.errors?.thumbnail && (
           <p className="text-red-500">{state.errors.thumbnail}</p>
         )}
-        {!!imageUrl && (
-          <Image src={imageUrl} alt="post thumbnail" width={200} height={150} />
+        {(!!imageUrl || !!state?.data?.previousThumbnailUrl) && (
+          <Image
+            src={(imageUrl || state?.data?.previousThumbnailUrl) ?? ""}
+            alt="post thumbnail"
+            width={200}
+            height={150}
+          />
         )}
       </div>
 
@@ -71,16 +82,16 @@ const UpsertPostForm = ({ state, formAction }: Props) => {
         <p className="text-red-500">{state.errors.tags}</p>
       )}
       <div className="flex items-center">
-        <input
+        <Input
           type="checkbox"
           name="published"
           className="mx-2 w-4 h-4"
-          defaultValue={state?.data?.isPublished}
+          defaultChecked={state?.data?.published === "on" ? true : false}
         />
         <Label htmlFor="published">Published Now</Label>
       </div>
-      {!!state?.errors?.isPublished && (
-        <p className="text-red-500">{state.errors.isPublished}</p>
+      {!!state?.errors?.published && (
+        <p className="text-red-500">{state.errors.published}</p>
       )}
       <SubmitButton>Save</SubmitButton>
     </form>

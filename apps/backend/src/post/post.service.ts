@@ -1,7 +1,8 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { DEFAULT_PAGE_SIZE } from 'src/constants';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { CreatePostInput } from './dto/create-post.input';
+import { UpdatePostInput } from './dto/update-post.input';
 
 @Injectable()
 export class PostService {
@@ -94,5 +95,47 @@ export class PostService {
         },
       },
     });
+  }
+
+  async update({
+    userId,
+    updatePostInput,
+  }: {
+    userId: number;
+    updatePostInput: UpdatePostInput;
+  }) {
+    const authorIdMatched = await this.prisma.post.findUnique({
+      where: { id: updatePostInput.postId, authorId: userId },
+    });
+    if (!authorIdMatched) {
+      throw new UnauthorizedException();
+    }
+    const { postId, ...data } = updatePostInput;
+    return await this.prisma.post.update({
+      where: { id: postId },
+      data: {
+        ...data,
+        tags: {
+          set: [],
+          connectOrCreate: updatePostInput.tags.map((tag) => ({
+            where: { name: tag },
+            create: { name: tag },
+          })),
+        },
+      },
+    });
+  }
+
+  async delete({ postId, userId }: { postId: number; userId: number }) {
+    const authorIdMatched = await this.prisma.post.findUnique({
+      where: { id: postId, authorId: userId },
+    });
+    if (!authorIdMatched) {
+      throw new UnauthorizedException();
+    }
+    const result = await this.prisma.post.delete({
+      where: { id: postId, authorId: userId },
+    });
+    return !!result;
   }
 }
